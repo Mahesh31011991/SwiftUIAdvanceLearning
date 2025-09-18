@@ -11,7 +11,7 @@ import SwiftUI
 struct SwiftUIAdvanceLearningApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            AnyTransitionBootCamp()
         }
     }
 }
