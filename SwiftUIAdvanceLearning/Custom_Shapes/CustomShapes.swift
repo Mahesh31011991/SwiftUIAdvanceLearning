@@ -40,5 +40,53 @@ struct CustomShapes: View {
 }
 
 #Preview {
-    CustomShapes()
+    PacmanView()
 }
+
+import SwiftUI
+
+struct PacmanShape: Shape {
+    var mouthAngle: Double
+    
+    var animatableData: Double {
+        get { mouthAngle }
+        set { mouthAngle = newValue }
+    }
+    
+    func path(in rect: CGRect) -> Path {
+        let radius = min(rect.width, rect.height) / 2
+        let center = CGPoint(x: rect.midX, y: rect.midY)
+        
+        let startAngle = Angle(degrees: mouthAngle)
+        let endAngle = Angle(degrees: 360 - mouthAngle)
+        
+        var path = Path()
+        path.move(to: center)
+        path.addArc(center: center,
+                    radius: radius,
+                    startAngle: startAngle,
+                    endAngle: endAngle,
+                    clockwise: false)
+        path.closeSubpath()
+        
+        return path
+    }
+}
+
+struct PacmanView: View {
+    @State private var mouthOpen = true
+    
+    var body: some View {
+        PacmanShape(mouthAngle: mouthOpen ? 40 : 5)
+            .fill(Color.yellow)
+            .frame(width: 200, height: 200)
+            .onAppear {
+                withAnimation(Animation.easeInOut(duration: 0.4).repeatForever(autoreverses: true)) {
+                    mouthOpen.toggle()
+                }
+            }
+    }
+}
+
+
+
